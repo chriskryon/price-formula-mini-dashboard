@@ -9,14 +9,14 @@ def render_taxa():
     st.info("Informe Valor total, Entrada, nº de parcelas e o valor da parcela. O app encontra a taxa por período que gera essa parcela.")
     # Garantir chave de sessão para parcela (mantém valor entre reruns)
     if "parcela_informada" not in st.session_state:
-        st.session_state["parcela_informada"] = 324.92
+        st.session_state["parcela_informada"] = 792
 
     # Inputs — cálculo automático
     c1, c2 = st.columns(2)
     valor_total = c1.number_input("Valor total (R$)", min_value=0.0, value=3519.0, format="%.2f", help="Preço total do bem/serviço")
     entrada = c2.number_input("Entrada (R$)", min_value=0.0, value=1000.0, format="%.2f", help="Valor pago à vista")
     c3, c4 = st.columns(2)
-    num_parcelas = int(c3.number_input("Número de parcelas", min_value=1, value=12, step=1, help="Quantidade de parcelas (máx. 360 recomendadas)"))
+    num_parcelas = int(c3.number_input("Número de parcelas", min_value=1, value=5, step=1, help="Quantidade de parcelas (máx. 360 recomendadas)"))
 
     # Opção para tornar o campo 'parcela' editável; por padrão fica desabilitado e mantém o valor em session_state
     editar_parcela = c4.checkbox("Editar valor da parcela", value=False, key="editar_parcela_taxa", help="Ative para digitar manualmente o valor da parcela")
@@ -32,12 +32,12 @@ def render_taxa():
             else:
                 auto_parcela = pv_est / max(1, int(num_parcelas))
         except Exception:
-            auto_parcela = st.session_state.get("parcela_informada", 324.92)
+            auto_parcela = st.session_state.get("parcela_informada", 792)
         # atualizar session_state para refletir o novo valor mostrado
         st.session_state["parcela_informada_taxa"] = float(auto_parcela)
 
     # Usar widget com key para preservar o valor e evitar que mudanças em outros widgets o alterem
-    parcela_informada = c4.number_input("Valor da parcela (R$)", min_value=0.0, value=float(st.session_state.get("parcela_informada_taxa", st.session_state.get("parcela_informada", 324.92))), format="%.2f", key="parcela_informada_taxa", disabled=not editar_parcela)
+    parcela_informada = c4.number_input("Valor da parcela (R$)", min_value=0.0, value=float(st.session_state.get("parcela_informada_taxa", st.session_state.get("parcela_informada", 792))), format="%.2f", key="parcela_informada_taxa", disabled=not editar_parcela)
 
     # Validações reforçadas
     invalid = False
